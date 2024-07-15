@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
-from Assignment5.api.dependencies.database import get_db
-from Assignment5.api.models.models import OrderDetail
-from Assignment5.api.models.schemas import OrderDetailCreate, OrderDetailRead, OrderDetailUpdate
+from ..dependencies.database import get_db
+from ..models.models import OrderDetail
+from ..models.schemas import OrderDetailCreate, OrderDetailRead, OrderDetailUpdate
 
 router = APIRouter()
 
@@ -25,14 +25,14 @@ def read_all_order_details(skip: int = 0, limit: int = 10, db: Session = Depends
 def read_order_detail(order_detail_id: int, db: Session = Depends(get_db)):
     order_detail = db.query(OrderDetail).filter(OrderDetail.id == order_detail_id).first()
     if order_detail is None:
-        raise HTTPException(status_code=404, detail="OrderDetail not found")
+        raise HTTPException(status_code=404, detail="Order detail not found")
     return order_detail
 
 @router.put("/{order_detail_id}", response_model=OrderDetailRead)
 def update_order_detail(order_detail_id: int, order_detail: OrderDetailUpdate, db: Session = Depends(get_db)):
     db_order_detail = db.query(OrderDetail).filter(OrderDetail.id == order_detail_id).first()
     if db_order_detail is None:
-        raise HTTPException(status_code=404, detail="OrderDetail not found")
+        raise HTTPException(status_code=404, detail="Order detail not found")
     for key, value in order_detail.dict().items():
         setattr(db_order_detail, key, value)
     db.commit()
@@ -43,7 +43,7 @@ def update_order_detail(order_detail_id: int, order_detail: OrderDetailUpdate, d
 def delete_order_detail(order_detail_id: int, db: Session = Depends(get_db)):
     order_detail = db.query(OrderDetail).filter(OrderDetail.id == order_detail_id).first()
     if order_detail is None:
-        raise HTTPException(status_code=404, detail="OrderDetail not found")
+        raise HTTPException(status_code=404, detail="Order detail not found")
     db.delete(order_detail)
     db.commit()
-    return {"message": "OrderDetail deleted successfully"}
+    return {"message": "Order detail deleted successfully"}

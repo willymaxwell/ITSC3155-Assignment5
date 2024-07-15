@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
-from Assignment5.api.dependencies.database import get_db
-from Assignment5.api.models.models import Recipe
-from Assignment5.api.models.schemas import RecipeCreate, RecipeRead, RecipeUpdate
+from ..dependencies.database import get_db
+from ..models.models import Recipe
+from ..models.schemas import RecipeCreate, RecipeRead, RecipeUpdate
 
 router = APIRouter()
 
